@@ -16,6 +16,8 @@ const SearchGames = () => {
   // create state to hold saved gameId values
   const [savedgameIds, setSavedgameIds] = useState(getSavedgameIds());
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const [savegame, { error }] = useMutation(SAVE_game);
 
   // set up useEffect hook to save `savedgameIds` list to localStorage on component unmount
@@ -50,6 +52,7 @@ const SearchGames = () => {
           ratings: gameData.ratings_count,
           description: gameData.description,
           image: gameData.background_image,
+          // category:gameData.genres[0].name
         },
       ];
 
@@ -82,6 +85,16 @@ const SearchGames = () => {
       console.error(err);
     }
   };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredGames = selectedCategory
+    ? searchedGames.filter((game) => game.category === selectedCategory)
+    : searchedGames;
+
+
   return (
     <>
       <div className="text-info bg-black p-5">
@@ -109,17 +122,36 @@ const SearchGames = () => {
         </Container>
       </div>
 
+      <div>
+        <label>
+          Select category:
+          <select
+            value={selectedCategory}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="Action">Action</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Strategy">Strategy</option>
+            <option value="Puzzle">Puzzle</option>
+            <option value="Simulation">Simulation</option>
+            <option value="Sports">Sports</option>
+            <option value="Racing">Racing</option>
+          </select>
+        </label>
+      </div>
+
       <Container>
         <h2 className="text-info pt-5">
           {searchedGames.length
-            ? `Viewing ${searchedGames.length} results:`
+            ? `Viewing ${filteredGames.length} ${selectedCategory} results:`
             : "Search for a game to begin"}
         </h2>
         <Row>
-          {searchedGames.map((game) => {
+          {filteredGames.map((game) => {
             return (
-              <Col md="4">
-                <Card key={game.gameId} border="dark" className="mb-3">
+              <Col key={game.gameId} md="4">
+                <Card border="dark" className="mb-3">
                   {game.image ? (
                     <Card.Img
                       src={game.image}
