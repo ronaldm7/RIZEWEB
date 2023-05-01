@@ -7,7 +7,7 @@ import { savegameIds, getSavedgameIds } from "../utils/localStorage";
 
 import Auth from "../utils/auth";
 
-const Searchgames = () => {
+const SearchGames = () => {
   // create state for holding returned google api data
   const [searchedGames, setsearchedGames] = useState([]);
   // create state for holding our search field data
@@ -157,4 +157,4 @@ const Searchgames = () => {
   );
 };
 
-export default Searchgames;
+export default SearchGames;

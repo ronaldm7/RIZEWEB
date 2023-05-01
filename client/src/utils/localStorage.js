@@ -6,9 +6,9 @@ export const getSavedgameIds = () => {
   return savedgameIds;
 };
 
-export const savegameIds = (gameIdArr) => {
-  if (gameIdArr.length) {
-    localStorage.setItem('saved_games', JSON.stringify(gameIdArr));
+export const savegameIds = (gameId) => {
+  if (gameId.length) {
+    localStorage.setItem('saved_games', JSON.stringify(gameId));
   } else {
     localStorage.removeItem('saved_games');
   }
