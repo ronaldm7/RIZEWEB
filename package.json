@@ -4,7 +4,8 @@
   "description": "",
   "main": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
   "scripts": {
-   
+    "start": "concurrently \"cd server && npm run watch\" \"cd client && npm start\""
+    
   },
   "keywords": [],
   "author": "",
