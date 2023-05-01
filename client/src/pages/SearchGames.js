@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Col,
-  Form,
-  Button,
-  Card,
-  Row
-} from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 
-import { useMutation } from '@apollo/client';
-import { SAVE_game } from '../utils/mutations';
-import { savegameIds, getSavedgameIds } from '../utils/localStorage';
+import { useMutation } from "@apollo/client";
+import { SAVE_game } from "../utils/mutations";
+import { savegameIds, getSavedgameIds } from "../utils/localStorage";
 
-import Auth from '../utils/auth';
+import Auth from "../utils/auth";
 
 const Searchgames = () => {
   // create state for holding returned google api data
   const [searchedGames, setsearchedGames] = useState([]);
   // create state for holding our search field data
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
 
   // create state to hold saved gameId values
   const [savedgameIds, setSavedgameIds] = useState(getSavedgameIds());
@@ -40,31 +33,28 @@ const Searchgames = () => {
     }
 
     try {
+      const response = await fetch(
+        `https://api.rawg.io/api/games/${searchInput}?key=14b551dec6924be882d50879bbe0e06f`
+      );
 
-     const response = await fetch(`https://api.rawg.io/api/games/${searchInput}?key=14b551dec6924be882d50879bbe0e06f`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
 
-    if (!response.ok) {
-   throw new Error(`Error: ${response.status} ${response.statusText}`);
-    }
+      const gameData = await response.json();
 
-    const gameData = await response.json();
-
-
-    
-const GameData = [{
-  gameId: gameData.id,
-  title: gameData.name,
-  ratings: gameData.ratings_count,
-  description: gameData.description,
-  image: gameData.background_image
-}];
-
-
-
+      const GameData = [
+        {
+          gameId: gameData.id,
+          title: gameData.name,
+          ratings: gameData.ratings_count,
+          description: gameData.description,
+          image: gameData.background_image,
+        },
+      ];
 
       setsearchedGames(GameData);
-      setSearchInput('');
-
+      setSearchInput("");
     } catch (err) {
       console.error(err);
     }
@@ -94,7 +84,7 @@ const GameData = [{
   };
   return (
     <>
-      <div className="text-light bg-dark p-5">
+      <div className="text-info bg-black p-5">
         <Container>
           <h1>Search for games!</h1>
           <Form onSubmit={handleFormSubmit}>
@@ -120,16 +110,16 @@ const GameData = [{
       </div>
 
       <Container>
-        <h2 className='pt-5'>
+        <h2 className="text-info pt-5">
           {searchedGames.length
             ? `Viewing ${searchedGames.length} results:`
-            : 'Search for a game to begin'}
+            : "Search for a game to begin"}
         </h2>
         <Row>
           {searchedGames.map((game) => {
             return (
               <Col md="4">
-                <Card key={game.gameId} border="dark" className='mb-3'>
+                <Card key={game.gameId} border="dark" className="mb-3">
                   {game.image ? (
                     <Card.Img
                       src={game.image}
@@ -149,9 +139,11 @@ const GameData = [{
                         className="btn-block btn-info"
                         onClick={() => handleSavegame(game.gameId)}
                       >
-                        {savedgameIds?.some((savedId) => savedId === game.gameId)
-                          ? 'game Already Saved!'
-                          : 'Save This game!'}
+                        {savedgameIds?.some(
+                          (savedId) => savedId === game.gameId
+                        )
+                          ? "game Already Saved!"
+                          : "Save This game!"}
                       </Button>
                     )}
                   </Card.Body>
