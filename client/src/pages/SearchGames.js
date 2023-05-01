@@ -52,7 +52,7 @@ const SearchGames = () => {
           ratings: gameData.ratings_count,
           description: gameData.description,
           image: gameData.background_image,
-          // category:gameData.genres[0].name
+          category:gameData.genres[0].name
         },
       ];
 
